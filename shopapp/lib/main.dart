@@ -9,11 +9,11 @@ import './providers/products_provider.dart';
 
 void main() => runApp(MyApp());
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-      create: (ctx)=>ProductsProvider(), //Builder is used in version 3 in above 3 we use create
+      create: (ctx)=>ProductsProvider(), //Builder is used in version 3 ,in above 3 we use create
       child: MaterialApp(
         title: 'MyShop',
         theme: ThemeData(

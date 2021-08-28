@@ -4,6 +4,8 @@ import '../widgets/product_grid.dart';
 
 import 'package:provider/provider.dart';
 import '../providers/products_provider.dart';
+import '../widgets/badge.dart';
+import '../providers/cart.dart';
 
 enum FilterOptions {
   Favorites,
@@ -17,7 +19,7 @@ class ProductOverviewScreen extends StatefulWidget {
 
 class _ProductOverviewScreenState extends State<ProductOverviewScreen> {
   var _showOnlyFavorites = false;
-  
+
   @override
   Widget build(BuildContext context) {
     // final productData=Provider.of<ProductsProvider>(context);
@@ -29,13 +31,11 @@ class _ProductOverviewScreenState extends State<ProductOverviewScreen> {
             onSelected: (FilterOptions selectedvalue) {
               setState(() {
                 if (selectedvalue == FilterOptions.Favorites) {
-                _showOnlyFavorites=true;
-              } else if (selectedvalue==FilterOptions.All) {
-                _showOnlyFavorites=false;
-              }
-                
+                  _showOnlyFavorites = true;
+                } else if (selectedvalue == FilterOptions.All) {
+                  _showOnlyFavorites = false;
+                }
               });
-              
             },
             icon: Icon(
               Icons.more_vert,
@@ -50,7 +50,19 @@ class _ProductOverviewScreenState extends State<ProductOverviewScreen> {
                 value: FilterOptions.All,
               )
             ],
+          ),
+          Consumer<Cart>(
+            builder: (_, cartData, ch) => Badge(
+                child: ch!,
+                value: cartData.itemcount.toString(),
+                color: Theme.of(context).accentColor),
+                child:  IconButton(
+                  icon: Icon(Icons.shopping_cart),
+                  onPressed: () {},
+                ),
+                
           )
+          // IconButton(onPressed: (){}, icon: Icon(I))
         ],
       ),
       body: ProductsGrid(_showOnlyFavorites),

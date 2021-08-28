@@ -3,6 +3,7 @@ import 'package:shopapp/screens/product_detail_screen.dart';
 
 import 'package:provider/provider.dart';
 import '../providers/product.dart';
+import '../providers/cart.dart';
 
 class ProductItem extends StatelessWidget {
   // final String id;
@@ -19,6 +20,7 @@ class ProductItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final productData=Provider.of<Product>(context, listen: false);
+    final cartData= Provider.of<Cart>(context, listen: false);
     return ClipRRect(
       borderRadius: BorderRadius.circular(10),
       child: GridTile(
@@ -51,7 +53,9 @@ class ProductItem extends StatelessWidget {
             textAlign: TextAlign.center,
           ),
           trailing: IconButton(
-            onPressed: () {},
+            onPressed: () {
+              cartData.addItem(productData.id, productData.price, productData.title);
+            },
             icon: Icon(Icons.shopping_cart),
             color: Theme.of(context).accentColor,
           ),

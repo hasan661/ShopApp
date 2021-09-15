@@ -19,8 +19,8 @@ class ProductItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final productData=Provider.of<Product>(context, listen: false);
-    final cartData= Provider.of<Cart>(context, listen: false);
+    final productData = Provider.of<Product>(context, listen: false);
+    final cartData = Provider.of<Cart>(context, listen: false);
     return ClipRRect(
       borderRadius: BorderRadius.circular(10),
       child: GridTile(
@@ -39,11 +39,13 @@ class ProductItem extends StatelessWidget {
         header: Text("${productData.price}"),
         footer: GridTileBar(
           leading: Consumer<Product>(
-            builder: (ctx, product, _)=> IconButton(
+            builder: (ctx, product, _) => IconButton(
               onPressed: () {
                 productData.toggleFavorite();
               },
-              icon: Icon(productData.isFavorite ? Icons.favorite : Icons.favorite_border),
+              icon: Icon(productData.isFavorite
+                  ? Icons.favorite
+                  : Icons.favorite_border),
               color: Theme.of(context).accentColor,
             ),
           ),
@@ -54,7 +56,19 @@ class ProductItem extends StatelessWidget {
           ),
           trailing: IconButton(
             onPressed: () {
-              cartData.addItem(productData.id, productData.price, productData.title);
+              cartData.addItem(
+                  productData.id, productData.price, productData.title);
+              ScaffoldMessenger.of(context).hideCurrentSnackBar();
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text("Added item to cart"),
+                  duration: Duration(seconds: 2),
+                  action: SnackBarAction(label: "UNDO", onPressed: (){
+                    cartData.removeSingleItem(productData.id);
+                  }),
+                  
+                ),
+              );
             },
             icon: Icon(Icons.shopping_cart),
             color: Theme.of(context).accentColor,

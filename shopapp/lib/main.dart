@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shopapp/screens/editproductscreen.dart';
 import 'package:shopapp/screens/orders_screen.dart';
+import 'package:shopapp/screens/user_products_screen.dart';
 
 import '/providers/cart.dart';
 import '/providers/orders.dart';
@@ -16,6 +18,7 @@ void main() => runApp(MyApp());
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(
@@ -28,6 +31,7 @@ class MyApp extends StatelessWidget {
       ],
       //Builder is used in version 3 ,in above 3 we use create
       child: MaterialApp(
+        debugShowCheckedModeBanner: false,
         title: 'MyShop',
         theme: ThemeData(
             primaryColor: Colors.purple,
@@ -38,6 +42,8 @@ class MyApp extends StatelessWidget {
           ProductDetailScreen.routeName: (ctx) => ProductDetailScreen(),
           CartScreen.routeName: (ctx) => CartScreen(),
           OrdersScreen.routeName:(ctx)=>OrdersScreen(),
+          UserProductScreen.routeName:(ctx)=>UserProductScreen(),
+          EditProductScreen.routeName:(ctx)=>EditProductScreen(),
         },
       ),
     );

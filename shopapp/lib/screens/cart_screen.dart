@@ -7,6 +7,7 @@ import '../providers/orders.dart';
 
 class CartScreen extends StatelessWidget {
   static const routeName = "/cart";
+  
   @override
   Widget build(BuildContext context) {
     final cartData = Provider.of<Cart>(context);
@@ -39,16 +40,7 @@ class CartScreen extends StatelessWidget {
                     ),
                     backgroundColor: Theme.of(context).primaryColor,
                   ),
-                  TextButton(
-                    onPressed: () {
-                      Provider.of<Orders>(context, listen: false).addOrder(cartData.items.values.toList(), cartData.totalAmount);
-                      cartData.clearcart();
-                    },
-                    child: Text(
-                      "PLACE ORDER",
-                      style: TextStyle(color: Theme.of(context).primaryColor),
-                    ),
-                  )
+                  OrderButton(cartData: cartData)
                 ],
               ),
             ),
@@ -67,6 +59,42 @@ class CartScreen extends StatelessWidget {
                 prodid: cartData.items.keys.toList()[index],),
           ))
         ],
+      ),
+    );
+  }
+}
+
+class OrderButton extends StatefulWidget {
+  const OrderButton({
+    Key? key,
+    required this.cartData,
+  }) : super(key: key);
+
+  final Cart cartData;
+
+  @override
+  _OrderButtonState createState() => _OrderButtonState();
+}
+
+class _OrderButtonState extends State<OrderButton> {
+  var _isLoading=false;
+  @override
+  Widget build(BuildContext context) {
+    return TextButton(
+      onPressed: (widget.cartData.totalAmount <=0 || _isLoading)? null : () async {
+        setState(() {
+          _isLoading=true;
+        });
+        await Provider.of<Orders>(context, listen: false).addOrder(widget.cartData.items.values.toList(), widget.cartData.totalAmount);
+                setState(() {
+          _isLoading=false;
+        });
+
+        widget.cartData.clearcart();
+      },
+      child: _isLoading?CircularProgressIndicator() :Text(
+        "PLACE ORDER",
+        style: TextStyle(color: Theme.of(context).primaryColor),
       ),
     );
   }

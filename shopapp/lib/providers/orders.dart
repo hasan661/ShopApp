@@ -25,7 +25,7 @@ class Orders with ChangeNotifier {
 
   Future<void> addOrder(List<CartItem> cartProducts, double total) async {
     Uri url = Uri.parse(
-        "https://shopapp-6589d-default-rtdb.firebaseio.com/orders.json");
+        "https://shopapp-6589d-default-rtdb.firebaseio.com/orders/$userId.json?auth=$authToken");
     final timestamp = DateTime.now();
     final response = await http.post(url,
         body: json.encode({
@@ -38,6 +38,7 @@ class Orders with ChangeNotifier {
                     "quantity": cp.quantity,
                     "price": cp.price
                   })
+                  
               .toList()
         }));
     _orders.insert(
@@ -50,10 +51,13 @@ class Orders with ChangeNotifier {
         ));
     notifyListeners();
   }
+  String? authToken;
+  String? userId;
+  Orders(this.authToken,this._orders, this.userId);
 
   Future<void> fetchorders() async {
     Uri url = Uri.parse(
-        "https://shopapp-6589d-default-rtdb.firebaseio.com/orders.json");
+        "https://shopapp-6589d-default-rtdb.firebaseio.com/orders/$userId.json?auth=$authToken");
     final response = await http.get(url);
     final List<OrderItem> _loadedOrders = [];
     if(json.decode(response.body)==null){
@@ -83,6 +87,6 @@ class Orders with ChangeNotifier {
     });
     _orders=_loadedOrders.reversed.toList();
     notifyListeners();
-    print("Hasan");
+    // print("Hasan");
   }
 }

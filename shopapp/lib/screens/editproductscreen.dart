@@ -93,16 +93,33 @@ class _EditProductScreenState extends State<EditProductScreen> {
     _formkey.currentState!.save();
     if (_editiedProducts.id != "") {
       // print("5");
-      await Provider.of<ProductsProvider>(context, listen: false)
-          .updateProduct(_editiedProducts.id, _editiedProducts);
-      
+      try {
+        await Provider.of<ProductsProvider>(context, listen: false)
+            .updateProduct(_editiedProducts.id, _editiedProducts);
+      } catch (error) {
+        print(error);
+        await showDialog(
+            context: context,
+            builder: (ctx) => AlertDialog(
+                  title: Text(
+                    "Error Updating Your Product",
+                  ),
+                  content: Text(
+                    "Try Checking Your Internet Connection",
+                  ),
+                  actions: [
+                    TextButton(onPressed: (){
+                      Navigator.of(ctx).pop();
+                    }, child: Text("Okay"))
+                  ],
+                ));
+      }
     } else {
       // print("6");
-      try{
-      await Provider.of<ProductsProvider>(context, listen: false)
-          .addProduct(_editiedProducts);
-      }
-      catch(error){
+      try {
+        await Provider.of<ProductsProvider>(context, listen: false)
+            .addProduct(_editiedProducts);
+      } catch (error) {
         await showDialog(
           context: context,
           builder: (ctx) => AlertDialog(
@@ -111,18 +128,12 @@ class _EditProductScreenState extends State<EditProductScreen> {
             actions: [
               TextButton(
                   onPressed: () {
-                    
                     Navigator.of(ctx).pop();
-                    
-                    
-                    
                   },
                   child: Text("Okay"))
             ],
           ),
-          
         );
-
       }
       // finally{
       //   setState(() {
@@ -130,15 +141,12 @@ class _EditProductScreenState extends State<EditProductScreen> {
       //   });
       //   Navigator.of(context).pop();
       // }
-          
-          
-        
-      
+
     }
     setState(() {
-        _isLoading = false;
-      });
-      Navigator.of(context).pop();
+      _isLoading = false;
+    });
+    Navigator.of(context).pop();
   }
 
   @override
